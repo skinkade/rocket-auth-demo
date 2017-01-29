@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create user</title>
+</head>
+<body>
+
+<style>
+    label { display: table-cell, text-align: center; }
+    input { display: table-cell; }
+    hr    { visibility: hidden;  }
+    body  { text-align: center;  }
+</style>
+
+<script>
+// https://stackoverflow.com/a/4033310
+function httpGetAsync(theUrl, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous
+    xmlHttp.send(null);
+}
+
+function generateQR() {
+    var name = document.getElementById("username").value;
+
+    httpGetAsync("/qr/{{auth_key}}/" + name, function(data_uri) {
+        var qr_element = document.getElementById("qrcode");
+        qr_element.src = data_uri;
+        qr_element.style = "text-align: center;";
+    });
+}
+</script>
+
+
+<h1>Create user</h1>
+
+<form action="/create" method="post" accept-charset="utf-8">
+    <hr />
+    <div>
+        <label for="username">Username</label>
+        <hr />
+        <input type="text" id="username" name="username">
+    </div>
+
+    <hr />
+    <hr />
+
+    <div>
+        <label for="password">Password</label>
+        <hr />
+        <input type="password" id="password" name="password">
+    </div>
+
+    <hr />
+    <hr />
+
+    <div>
+        <label for="password_confirm">Confirm Password</label>
+        <hr />
+        <input type="password" id="password_confirm" name="password_confirm">
+    </div>
+
+    <hr />
+    <hr />
+
+    <input type="text" name="auth_key" value="{{auth_key}}" style="display: none">
+    <div>
+        <img id="qrcode" style="display: none">
+    </div>
+
+    <button type="button" onclick="generateQR()">Generate QR</button>
+
+    <hr />
+    <div>
+        <label for="auth_code">Enter code generated from above token to enable 2FA</label>
+        <hr />
+        <input type="password" id="auth_code" name="auth_code">
+    </div>
+
+    <hr />
+    <hr />
+
+    <input type="submit" value="Create">
+</form>
+
+</body>
+</html>

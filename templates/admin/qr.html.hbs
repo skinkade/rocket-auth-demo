@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2FA Token for {{username}}</title>
+</head>
+<body>
+
+{{ #if qr_image_uri }}
+<img src="{{qr_image_uri}}">
+{{ else }}
+<p>{{username}} does not use 2FA</p>
+{{ /if }}
+
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<style>
+    label { display: table-cell, text-align: center; }
+    input { display: table-cell; }
+    hr    { visibility: hidden;  }
+    body  { text-align: center;  }
+</style>
+
+<h1>Login</h1>
+
+<form action="/login" method="post" accept-charset="utf-8">
+    <hr />
+    <div>
+        <label for="username">Username</label>
+        <hr />
+        <input type="text" id="username" name="username">
+    </div>
+    <hr />
+    <hr />
+    <div>
+        <label for="password">Password</label>
+        <hr />
+        <input type="password" id="password" name="password">
+    </div>
+    <hr />
+    <hr />
+    <div>
+        <label for="auth_code">2FA Code (if applicable)</label>
+        <hr />
+        <input type="password" id="auth_code" name="auth_code">
+    </div>
+    <hr />
+    <hr />
+    <input type="submit" value="Login">
+</form>
+
+</body>
+</html>
