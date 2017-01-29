@@ -1,6 +1,6 @@
 # Rocket Authentication Demo
 
-See [this blogpost](https://skinkade.github.io/rocket-auth-demo).
+See [this blogpost](https://skinkade.github.io/rocket-auth-demo/).
 
 To get this working, you need PostgreSQL set up, and run:
 
