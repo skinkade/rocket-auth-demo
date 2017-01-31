@@ -17,6 +17,10 @@ use rand::Rng;
 use argon2rs::verifier::Encoded;
 use data_encoding::base32;
 
+use std::thread;
+use std::time::Duration;
+const RATE_LIMIT: u64 = 500; // ms
+
 
 
 #[derive(FromForm)]
@@ -46,6 +50,7 @@ fn login(cookies: &Cookies, login_form: Form<Login>) -> Redirect {
         };
 
         if !auth_2fa::verify(user.auth_token.unwrap(), auth_code) {
+            thread::sleep(Duration::from_millis(RATE_LIMIT));
             return Redirect::to("/login");
         }
     }
@@ -55,6 +60,7 @@ fn login(cookies: &Cookies, login_form: Form<Login>) -> Redirect {
     // Argon2 password verifier
     let db_hash = Encoded::from_u8(&hash).expect("Failed to read password hash");
     if !db_hash.verify(login.password.as_ref()) {
+        thread::sleep(Duration::from_millis(RATE_LIMIT));
         return Redirect::to("/login");
     }
 
