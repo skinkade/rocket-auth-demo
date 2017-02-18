@@ -47,8 +47,12 @@ impl<'a, 'r> FromRequest<'a, 'r> for UserRolesToken {
 
     fn from_request(request: &'a Request<'r>) -> request::Outcome<UserRolesToken, ()> {
         if let Some(token) = request.cookies().find("jwt").map(|cookie| cookie.value) {
-            let token_data = extract(token).unwrap();
-            return Outcome::Success(token_data.claims);
+            let claims = extract(token).unwrap().claims;
+            if claims.is_expired() {
+                return Outcome::Failure((Status::Unauthorized, ()));
+            } else {
+                return Outcome::Success(claims);
+            }
         } else {
             return Outcome::Failure((Status::Unauthorized,()));
         }
