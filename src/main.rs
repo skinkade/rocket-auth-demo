@@ -78,6 +78,8 @@ fn main() {
                        auth::create_account,
                        auth::create_page,
                        auth_2fa::qr_image_uri,
-                       admin::handler])
+                       admin::index,
+                       admin::user,
+                       admin::qr])
         .launch();
 }

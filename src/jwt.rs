@@ -3,6 +3,11 @@
 //      When we verify a user, we give them a signed token confirming their
 //          identity and roles, so we don't need to handle sessions
 //
+use rocket::request::{self, Request, FromRequest};
+use rocket::http::Status;
+use rocket::Outcome;
+
+
 use jsonwebtoken::{encode, decode, Header, Algorithm, errors, TokenData};
 use time;
 
@@ -34,6 +39,19 @@ impl UserRolesToken {
 
     pub fn has_role(&self, role: &str) -> bool {
         self.roles.contains(&role.to_string())
+    }
+}
+
+impl<'a, 'r> FromRequest<'a, 'r> for UserRolesToken {
+    type Error = ();
+
+    fn from_request(request: &'a Request<'r>) -> request::Outcome<UserRolesToken, ()> {
+        if let Some(token) = request.cookies().find("jwt").map(|cookie| cookie.value) {
+            let token_data = extract(token).unwrap();
+            return Outcome::Success(token_data.claims);
+        } else {
+            return Outcome::Failure((Status::Unauthorized,()));
+        }
     }
 }
 
